@@ -262,8 +262,16 @@ require('lazy').setup({
 -- See `:help vim.o`
 -- NOTE: You can change these options as you wish!
 
+vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+vim.api.nvim_set_hl(0, "ctermbg", { bg = "none" })
+
+
 -- Set highlight on search
 vim.o.hlsearch = false
+
+vim.o.tabstop = 4;
+vim.o.shiftwidth = 4;
 
 -- Make line numbers default
 vim.wo.number = true
