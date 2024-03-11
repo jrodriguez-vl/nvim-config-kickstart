@@ -558,15 +558,16 @@ local on_attach = function(client, bufnr)
     --     require('omnisharp_extended').telescope_lsp_definitions({jump_type = "vsplit"})
     -- end
 
-    -- if client.name == "omnisharp" then
-        -- nmap('gd', require('omnisharp_extended').telescope_lsp_definitions, "[G]oto [D]efinition")
-        -- nmap('gr', require('omnisharp_extended').telescope_lsp_references, '[G]oto [R]eferences')
-        -- nmap('gI', require('omnisharp_extended').telescope_lsp_implementation, '[G]oto [I]mplementation')
-    -- else
+    if client.name == "omnisharp" then
+    print('loading omnisharp plugs')
+        nmap('gd', require('omnisharp_extended').telescope_lsp_definition, "[G]oto [D]efinition")
+        nmap('gr', require('omnisharp_extended').telescope_lsp_references, '[G]oto [R]eferences')
+        nmap('gI', require('omnisharp_extended').telescope_lsp_implementation, '[G]oto [I]mplementation')
+    else
         nmap('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
         nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
         nmap('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
-    -- end
+    end
 
     nmap('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
     nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
@@ -627,22 +628,23 @@ require('lsp_signature').setup()
 --  If you want to override the default filetypes that your language server will attach to you can
 --  define the property 'filetypes' to the map in question.
 local servers = {
-    -- clangd = {},
-    lua_ls = {
-        Lua = {
-            workspace = { checkThirdParty = false },
-            telemetry = { enable = false },
-            -- NOTE: toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-            -- diagnostics = { disable = { 'missing-fields' } },
-        },
+  clangd = {},
+  lua_ls = {
+    Lua = {
+      workspace = { checkThirdParty = false },
+      telemetry = { enable = false },
+      -- NOTE: toggle below to ignore Lua_LS's noisy `missing-fields` warnings
+      -- diagnostics = { disable = { 'missing-fields' } },
     },
-    -- gopls = {},
-    -- pyright = {},
-    -- rust_analyzer = {},
-    -- tsserver = {},
-    -- html = { filetypes = { 'html', 'twig', 'hbs'} },
-    -- angularls = {},
-    -- vuels = {},
+  },
+  gopls = {},
+  -- pyright = {},
+  -- rust_analyzer = {},
+  tsserver = {},
+  html = { filetypes = { 'html', 'twig', 'hbs'} },
+  angularls = {},
+  vuels = {},
+  omnisharp = {},
 }
 
 -- Setup neovim lua configuration
