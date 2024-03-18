@@ -56,7 +56,7 @@ require('lazy').setup({
   'tpope/vim-rhubarb',
 
   -- Detect tabstop and shiftwidth automatically
-  'tpope/vim-sleuth',
+  -- 'tpope/vim-sleuth',
 
   -- NOTE: This is where your plugins related to LSP can be installed.
   --  The configuration is done below. Search for lspconfig to find it below.
@@ -193,8 +193,8 @@ require('lazy').setup({
         style = 'dark', -- dark, darker, cool, deep, warm, warmer, light
         transparent = true,
         styles = {
-            sidebars = "transparent",
-            floats = "transparent",
+            -- sidebars = "transparent",
+            -- floats = "transparent",
         },
       }
       require('onedark').load()
@@ -280,7 +280,21 @@ require('lazy').setup({
       direction = "float",
     },
   },
-  {'puremourning/vimspector'},
+  {
+    'puremourning/vimspector',
+    init = function ()
+      vim.g.vimspector_enable_mappings = "HUMAN"
+    end,
+    cmd = { "VimspectorInstall", "VimspectorUpdate" },
+    keys = {
+      { "<F5>", "Start/Continue Debugging"},
+      { "<leader>db", "<Plug>VimspectorToggleBreakpoint	", desc = "Debug Breakpoint Toggle" },
+      { "<leader>dl", "<cmd>VimspectorToggleLog<CR>", desc = "Debug Log Toggle" },
+      { "<leader>dc", "<cmd>VimspectorReset<CR><CR>", desc = "Debug Close" },
+      { "<leader>di",  "<Plug>VimspectorBalloonEval", desc = "[D]ebug [I]nspect" },
+
+    },
+  },
   {
     'ray-x/lsp_signature.nvim',
     event = "VeryLazy",
@@ -293,10 +307,10 @@ require('lazy').setup({
 -- See `:help vim.o`
 -- NOTE: You can change these options as you wish!
 
-vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+-- vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+-- vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 -- vim.api.nvim_set_hl(0, "ctermbg", { bg = "none" })
-vim.api.nvim_set_hl(0, "pmenu", { bg = "none" })
+-- vim.api.nvim_set_hl(0, "pmenu", { bg = "none" })
 
 -- Set highlight on search
 vim.o.hlsearch = false
