@@ -281,7 +281,12 @@ require('lazy').setup({
     },
   },
   {'puremourning/vimspector'},
-  {'ray-x/lsp_signature.nvim'}
+  {
+    'ray-x/lsp_signature.nvim',
+    event = "VeryLazy",
+    opts = {},
+    config = function(_, opts) require'lsp_signature'.setup(opts) end
+  }
 }, {})
 
 -- [[ Setting options ]]
@@ -591,6 +596,12 @@ local on_attach = function(client, bufnr)
     end, { desc = 'Format current buffer with LSP' })
 
   --maybe setup signature here
+  require "lsp_signature".on_attach({
+    bind = true,
+    handler_opts = {
+      border = "rounded"
+    }
+  }, bufnr)
 
 
 end
