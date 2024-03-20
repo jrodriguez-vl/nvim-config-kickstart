@@ -485,7 +485,7 @@ vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = 
 vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { 'c', 'cpp', 'c_sharp', 'go', 'lua', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash'},
+    ensure_installed = { 'c', 'cpp', 'c_sharp', 'go', 'lua', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'vue', 'bash'},
 
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
     auto_install = true,
@@ -670,6 +670,7 @@ local servers = {
   tsserver = {},
   html = { filetypes = { 'html', 'twig', 'hbs'} },
   angularls = {},
+  cssls = {},
   vuels = {},
   omnisharp = {},
 }
