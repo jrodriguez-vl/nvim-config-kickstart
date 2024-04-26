@@ -300,7 +300,17 @@ require('lazy').setup({
     event = "VeryLazy",
     opts = {},
     config = function(_, opts) require'lsp_signature'.setup(opts) end
-  }
+  },
+  {
+    "nvim-neo-tree/neo-tree.nvim",
+    branch = "v3.x",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+      "MunifTanjim/nui.nvim",
+      -- "3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
+    }
+  },
 }, {})
 
 -- [[ Setting options ]]
@@ -370,7 +380,7 @@ vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = tr
 -- Ex buffer
 vim.keymap.set('n', '<leader>pv', vim.cmd.Ex)
 -- jk to escape insert mode
-vim.keymap.set('i', 'jk', "<ESC>")
+-- vim.keymap.set('i', 'jk', "<ESC>")
 
 -- center on half page scolls
 vim.keymap.set('n', "<C-d>", "<C-d>zz")
@@ -409,6 +419,23 @@ require('telescope').setup {
         ['<C-d>'] = false,
       },
     },
+  },
+  pickers = {
+    live_grep = {
+      no_ignore = true,
+      no_ignore_parent = true,
+      file_ignore_patterns = { 'node_modules', '.git', '.venv' },
+      additional_args = function(_)
+        return { "--hidden" }
+      end
+    },
+    find_files = {
+      no_ignore = true,
+      no_ignore_parent = true,
+      file_ignore_patterns = { 'node_modules', '.git', '.venv' },
+      hidden = true
+    }
+
   },
 }
 
@@ -485,7 +512,7 @@ vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = 
 vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { 'c', 'cpp', 'c_sharp', 'go', 'lua', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'vue', 'php', 'bash'},
+    ensure_installed = { 'c', 'cpp', 'c_sharp', 'go', 'lua', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'vue', 'php', 'bash', 'xml' },
 
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
     auto_install = true,
