@@ -300,17 +300,7 @@ require('lazy').setup({
     event = "VeryLazy",
     opts = {},
     config = function(_, opts) require'lsp_signature'.setup(opts) end
-  },
-  {
-    "nvim-neo-tree/neo-tree.nvim",
-    branch = "v3.x",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
-      "MunifTanjim/nui.nvim",
-      -- "3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
-    }
-  },
+  }
 }, {})
 
 -- [[ Setting options ]]
@@ -321,14 +311,17 @@ require('lazy').setup({
 -- vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 -- vim.api.nvim_set_hl(0, "ctermbg", { bg = "none" })
 -- vim.api.nvim_set_hl(0, "pmenu", { bg = "none" })
+-- vim.api.nvim.set_hl(0, "Visual", { bg = "none" })
+vim.cmd("hi Visual term=reverse cterm=reverse guibg=Grey")
 
 -- Set highlight on search
 vim.o.hlsearch = false
-
 vim.o.tabstop = 4;
 vim.o.softtabstop = 4;
 vim.o.shiftwidth = 4;
 vim.o.expandtab = true;
+
+vim.opt.swapfile = false;
 
 -- Make line numbers default
 vim.wo.number = true
@@ -393,8 +386,8 @@ vim.keymap.set('n', "N", "Nzzzv")
 vim.keymap.set('x', "<leader>P", "\"_dP")
 
 -- Diagnostic keymaps
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic message' })
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic message' })
+vim.keymap.set('n', '<leader>pe', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic message' })
+vim.keymap.set('n', '<leader>ne', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic message' })
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
@@ -423,16 +416,16 @@ require('telescope').setup {
   pickers = {
     live_grep = {
       no_ignore = true,
-      no_ignore_parent = true,
-      file_ignore_patterns = { 'node_modules', '.git', '.venv' },
+      -- no_ignore_parent = true,
+      file_ignore_patterns = { 'node_modules', '.git', '.venv', 'dist/css', 'dist/js' },
       additional_args = function(_)
         return { "--hidden" }
       end
     },
     find_files = {
-      no_ignore = true,
-      no_ignore_parent = true,
-      file_ignore_patterns = { 'node_modules', '.git', '.venv' },
+      -- no_ignore = true,
+      -- no_ignore_parent = true,
+      file_ignore_patterns = { 'node_modules', '.git', '.venv', 'dist/css', 'dist/js' },
       hidden = true
     }
 
@@ -512,7 +505,7 @@ vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = 
 vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { 'c', 'cpp', 'c_sharp', 'go', 'lua', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'vue', 'php', 'bash', 'xml' },
+    ensure_installed = { 'c', 'cpp', 'c_sharp', 'go', 'lua', 'tsx', 'javascript', 'java', 'typescript', 'vimdoc', 'vim', 'vue', 'php', 'bash', 'xml', 'kotlin' , 'xml' },
 
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
     auto_install = true,
@@ -598,7 +591,6 @@ local on_attach = function(client, bufnr)
     -- end
 
     if client.name == "omnisharp" then
-    print('loading omnisharp plugs')
         nmap('gd', require('omnisharp_extended').telescope_lsp_definition, "[G]oto [D]efinition")
         nmap('gr', require('omnisharp_extended').telescope_lsp_references, '[G]oto [R]eferences')
         nmap('gI', require('omnisharp_extended').telescope_lsp_implementation, '[G]oto [I]mplementation')
@@ -614,7 +606,7 @@ local on_attach = function(client, bufnr)
 
     -- See `:help K` for why this keymap
     nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-    nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
+    -- nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
 
     -- Lesser used LSP functionality
     nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
@@ -692,6 +684,8 @@ local servers = {
   phpactor = {},
   vuels = {},
   omnisharp = {},
+  kotlin_language_server = {},
+  java_language_server = {}
 }
 
 -- Setup neovim lua configuration
