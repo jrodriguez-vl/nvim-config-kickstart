@@ -674,18 +674,18 @@ local servers = {
       -- diagnostics = { disable = { 'missing-fields' } },
     },
   },
-  gopls = {},
+  -- gopls = {},
   -- pyright = {},
   -- rust_analyzer = {},
   tsserver = {},
   html = { filetypes = { 'html', 'twig', 'hbs'} },
-  angularls = {},
+  -- angularls = {},
   cssls = {},
   phpactor = {},
   vuels = {},
   omnisharp = {},
   kotlin_language_server = {},
-  java_language_server = {}
+  -- java_language_server = {}
 }
 
 -- Setup neovim lua configuration
