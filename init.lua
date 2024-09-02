@@ -56,7 +56,7 @@ require('lazy').setup({
   'tpope/vim-rhubarb',
 
   -- Detect tabstop and shiftwidth automatically
-  -- 'tpope/vim-sleuth',
+  'tpope/vim-sleuth',
 
   -- NOTE: This is where your plugins related to LSP can be installed.
   --  The configuration is done below. Search for lspconfig to find it below.
@@ -505,10 +505,10 @@ vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = 
 vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { 'c', 'cpp', 'c_sharp', 'go', 'lua', 'tsx', 'javascript', 'java', 'typescript', 'vimdoc', 'vim', 'vue', 'php', 'bash', 'xml', 'kotlin' , 'xml' },
+    ensure_installed = { 'c', 'cpp', 'c_sharp', 'gdscript','go', 'lua', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'vue', 'php', 'bash', 'xml', 'kotlin' , 'xml' },
 
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
-    auto_install = true,
+    auto_install = false,
     -- Install languages synchronously (only applied to `ensure_installed`)
     sync_install = false,
     -- List of parsers to ignore installing
@@ -516,7 +516,7 @@ vim.defer_fn(function()
     -- You can specify additional Treesitter modules here: -- For example: -- playground = {--enable = true,-- },
     modules = {},
     highlight = { enable = true },
-    -- indent = { enable = true },
+    indent = { enable = true },
     -- incremental_selection = {
     --   enable = true,
     --   keymaps = {
@@ -674,7 +674,6 @@ local servers = {
       -- diagnostics = { disable = { 'missing-fields' } },
     },
   },
-  gopls = {},
   -- pyright = {},
   -- rust_analyzer = {},
   tsserver = {},
@@ -685,7 +684,6 @@ local servers = {
   vuels = {},
   omnisharp = {},
   kotlin_language_server = {},
-  java_language_server = {}
 }
 
 -- Setup neovim lua configuration
@@ -713,6 +711,18 @@ mason_lspconfig.setup_handlers {
   end,
 }
 
+-- Can't add 'gdscript' to servers because it is not listed in Mason. So :MasonInstall gdscript won't work
+local gdscript_config = {
+	capabilities = capabilities,
+	on_attach = on_attach,
+	settings = {},
+}
+if vim.fn.has("win32") == 1 then
+	-- Windows specific. Requires nmap installed (`winget install nmap`)
+	gdscript_config["cmd"] = { "ncat", "localhost", os.getenv("GDScript_Port") or "6005" }
+end
+require("lspconfig").gdscript.setup(gdscript_config)
+
 -- [[ Configure nvim-cmp ]]
 -- See `:help cmp`
 local cmp = require 'cmp'
@@ -726,7 +736,10 @@ cmp.setup {
       luasnip.lsp_expand(args.body)
     end,
   },
-  completion = {
+  -- completion = {
+  --   completeopt = 'menu,menuone,noinsert',
+  -- },
+  g = {
     completeopt = 'menu,menuone,noinsert',
   },
   mapping = cmp.mapping.preset.insert {
