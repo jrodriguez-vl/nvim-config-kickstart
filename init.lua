@@ -65,7 +65,10 @@ require('lazy').setup({
     'neovim/nvim-lspconfig',
     dependencies = {
       -- Automatically install LSPs to stdpath for neovim
-      { 'williamboman/mason.nvim', config = true },
+      {
+        'williamboman/mason.nvim',
+        config = true,
+      },
       'williamboman/mason-lspconfig.nvim',
 
       -- Useful status updates for LSP
@@ -360,6 +363,10 @@ vim.o.termguicolors = true
 
 vim.o.scrolloff = 10
 
+-- Allow commands to run on windows
+vim.o.shcf = '-c'
+vim.o.stmp = false
+
 -- [[ Basic Keymaps ]]
 
 -- Keymaps for better default experience
@@ -402,10 +409,35 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   pattern = '*',
 })
 
+local function filenameFirst(_, path)
+  local tail = vim.fs.basename(path)
+  local parent = vim.fs.dirname(path)
+  if parent == "." then return tail end
+  return string.format("%s\t\t%s", tail, parent)
+end
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "TelescopeResults",
+  callback = function(ctx)
+    vim.api.nvim_buf_call(ctx.buf, function()
+      vim.fn.matchadd("TelescopeParent", "\t\t.*$")
+      vim.api.nvim_set_hl(0, "TelescopeParent", { link = "Comment" })
+    end)
+  end,
+})
+
 -- [[ Configure Telescope ]]
 -- See `:help telescope` and `:help telescope.setup()`
 require('telescope').setup {
   defaults = {
+    path_display = { 'tail' },
+    dynamic_preview_title = true,
+    layout_strategy = 'vertical',
+    sorting_strategy = 'ascending',
+    layout_config = {
+      prompt_position = 'bottom',
+      height = 0.95,
+    },
     mappings = {
       i = {
         ['<C-u>'] = false,
@@ -414,7 +446,14 @@ require('telescope').setup {
     },
   },
   pickers = {
+    lsp_references = {
+      path_display = filenameFirst,
+    },
+    grep_string = {
+      path_display = filenameFirst,
+    },
     live_grep = {
+      path_display = filenameFirst,
       no_ignore = true,
       -- no_ignore_parent = true,
       file_ignore_patterns = { 'node_modules', '.git', '.venv', 'dist/css', 'dist/js' },
@@ -423,11 +462,13 @@ require('telescope').setup {
       end
     },
     find_files = {
+      path_display = filenameFirst,
       -- no_ignore = true,
       -- no_ignore_parent = true,
       file_ignore_patterns = { 'node_modules', '.git', '.venv', 'dist/css', 'dist/js' },
       hidden = true
-    }
+    },
+    git_status = { path_display = filenameFirst },
 
   },
 }
