@@ -189,11 +189,12 @@ require('lazy').setup({
     'catppuccin/nvim',
     priority = 1000,
     lazy = false,
+    -- opts = { transparent = true, },
     config = function()
       require('catppuccin').setup {
         -- Set a style preset. 'dark' is default.
-        style = 'dark', -- dark, darker, cool, deep, warm, warmer, light
-        transparent = true,
+        -- style = 'dark', -- dark, darker, cool, deep, warm, warmer, light
+        transparent_background = true,
         styles = {
             -- sidebars = "transparent",
             -- floats = "transparent",
@@ -202,24 +203,24 @@ require('lazy').setup({
       require('catppuccin').load()
     end,
   },
-  {
-    -- Theme inspired by Atom
-    -- 'navarasu/onedark.nvim',
-    -- priority = 1000,
-    -- lazy = false,
-    -- config = function()
-    --   require('onedark').setup {
-    --     -- Set a style preset. 'dark' is default.
-    --     style = 'dark', -- dark, darker, cool, deep, warm, warmer, light
-    --     transparent = true,
-    --     styles = {
-    --         -- sidebars = "transparent",
-    --         -- floats = "transparent",
-    --     },
-    --   }
-    --   require('onedark').load()
-    -- end,
-  },
+  -- {
+  --   -- Theme inspired by Atom
+  --   'navarasu/onedark.nvim',
+  --   priority = 1000,
+  --   lazy = false,
+  --   config = function()
+  --     require('onedark').setup {
+  --       -- Set a style preset. 'dark' is default.
+  --       style = 'dark', -- dark, darker, cool, deep, warm, warmer, light
+  --       transparent = true,
+  --       styles = {
+  --           -- sidebars = "transparent",
+  --           -- floats = "transparent",
+  --       },
+  --     }
+  --     require('onedark').load()
+  --   end,
+  -- },
 
   {
     -- Set lualine as statusline
