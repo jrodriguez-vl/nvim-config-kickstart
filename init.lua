@@ -184,14 +184,13 @@ require('lazy').setup({
       end,
     },
   },
-
   {
     -- Theme inspired by Atom
-    'navarasu/onedark.nvim',
+    'catppuccin/nvim',
     priority = 1000,
     lazy = false,
     config = function()
-      require('onedark').setup {
+      require('catppuccin').setup {
         -- Set a style preset. 'dark' is default.
         style = 'dark', -- dark, darker, cool, deep, warm, warmer, light
         transparent = true,
@@ -200,8 +199,26 @@ require('lazy').setup({
             -- floats = "transparent",
         },
       }
-      require('onedark').load()
+      require('catppuccin').load()
     end,
+  },
+  {
+    -- Theme inspired by Atom
+    -- 'navarasu/onedark.nvim',
+    -- priority = 1000,
+    -- lazy = false,
+    -- config = function()
+    --   require('onedark').setup {
+    --     -- Set a style preset. 'dark' is default.
+    --     style = 'dark', -- dark, darker, cool, deep, warm, warmer, light
+    --     transparent = true,
+    --     styles = {
+    --         -- sidebars = "transparent",
+    --         -- floats = "transparent",
+    --     },
+    --   }
+    --   require('onedark').load()
+    -- end,
   },
 
   {
