@@ -321,7 +321,13 @@ require('lazy').setup({
     event = "VeryLazy",
     opts = {},
     config = function(_, opts) require'lsp_signature'.setup(opts) end
-  }
+  },
+  'ThePrimeagen/vim-be-good',
+  { 'kevinhwang91/nvim-ufo',
+    dependencies = {
+      'kevinhwang91/promise-async'
+    }
+  },
 }, {})
 
 -- [[ Setting options ]]
@@ -385,6 +391,12 @@ vim.o.scrolloff = 10
 vim.o.shcf = '-c'
 vim.o.stmp = false
 
+-- UFO folding
+vim.o.foldcolumn = '1' -- '0' is not bad
+vim.o.foldlevel = 99   -- Using ufo provider need a large value, feel free to decrease the value
+vim.o.foldlevelstart = 99
+vim.o.foldenable = true
+
 -- [[ Basic Keymaps ]]
 
 -- Keymaps for better default experience
@@ -415,6 +427,22 @@ vim.keymap.set('n', '<leader>pe', vim.diagnostic.goto_prev, { desc = 'Go to prev
 vim.keymap.set('n', '<leader>ne', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic message' })
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
+
+
+local dotnetmaps = require('custom.local.dotnetmaps')
+
+vim.keymap.set('n', '<leader>nb', dotnetmaps.bootstrap_csharp_file, { desc = 'Bootstrap a new file' })
+vim.api.nvim_create_autocmd("BufReadPost", {
+  pattern = { "*.cs" },
+  callback = function()
+    local buf = vim.api.nvim_get_current_buf()
+    local line_count = vim.api.nvim_buf_line_count(buf)
+
+    if line_count == 1 and vim.api.nvim_buf_get_lines(buf, 0, 1, false)[1] == "" then
+      dotnetmaps.bootstrap_csharp_file()
+    end
+  end,
+})
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
@@ -798,10 +826,23 @@ local servers = {
 
 -- Setup neovim lua configuration
 require('neodev').setup()
+require('ufo').setup({
+    provider_selector = function(bufnr, filetype, buftype)
+        return {'treesitter', 'indent'}
+    end
+})
+-- require('ufo').setup()
+
+vim.keymap.set('n', 'zR', require('ufo').openAllFolds)
+vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
 
 -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+-- capabilities.textDocument.foldingRange = {
+-- 	dynamicRegistration = false,
+-- 	lineFoldingOnly = true
+-- }
 
 -- Ensure the servers above are installed
 local mason_lspconfig = require 'mason-lspconfig'

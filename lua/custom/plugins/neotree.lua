@@ -19,7 +19,7 @@ return {
     keys = {
       {'<leader>nt', "<cmd>Neotree toggle<CR>", desc = "Toggle Neotree"},
     },
-    config = function ()
-        vim.keymap.set("n", "<leader>ne", '<cmd>Neotree toggle<CR>', { desc = "Neotree toggle" })
-    end
+    -- config = function ()
+    --     vim.keymap.set("n", "<leader>ne", '<cmd>Neotree toggle<CR>', { desc = "Neotree toggle" })
+    -- end
 }
