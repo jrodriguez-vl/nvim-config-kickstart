@@ -328,6 +328,12 @@ require('lazy').setup({
       'kevinhwang91/promise-async'
     }
   },
+  {
+    "karb94/neoscroll.nvim",
+    opts = {
+      duration_multiplier = .3
+    },
+  },
 }, {})
 
 -- [[ Setting options ]]
@@ -413,8 +419,8 @@ vim.keymap.set('n', '<leader>pv', vim.cmd.Ex)
 -- vim.keymap.set('i', 'jk', "<ESC>")
 
 -- center on half page scolls
-vim.keymap.set('n', "<C-d>", "<C-d>zz")
-vim.keymap.set('n', "<C-u>", "<C-u>zz")
+-- vim.keymap.set('n', "<C-d>", "<C-d>zz")
+-- vim.keymap.set('n', "<C-u>", "<C-u>zz")
 
 -- center on next or previous
 vim.keymap.set('n', "n", "nzzzv")
