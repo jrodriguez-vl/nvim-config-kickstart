@@ -7,6 +7,7 @@
   "dotnet.nvim": { "branch": "main", "commit": "0fab9a63e75d8f286975f58daa4bd91c328e4e1f" },
   "fidget.nvim": { "branch": "main", "commit": "d855eed8a06531a7e8fd0684889b2943f373c469" },
   "friendly-snippets": { "branch": "main", "commit": "00ba9dd3df89509f95437b8d595553707c46d5ea" },
+  "gdscript-extended-lsp.nvim": { "branch": "master", "commit": "f4ab702b5ebdaf79acf6104071a8df7cc8771fbd" },
   "gitsigns.nvim": { "branch": "main", "commit": "1ef74b546732f185d0f806860fa5404df7614f28" },
   "harpoon": { "branch": "harpoon2", "commit": "0378a6c428a0bed6a2781d459d7943843f374bce" },
   "indent-blankline.nvim": { "branch": "master", "commit": "18603eb949eba08300799f64027af11ef922283f" },

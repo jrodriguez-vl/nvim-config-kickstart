@@ -330,11 +330,27 @@ require('lazy').setup({
   },
   {
     "karb94/neoscroll.nvim",
-    opts = {
-      duration_multiplier = .3
-    },
   },
+  {
+    "teatek/gdscript-extended-lsp.nvim", opts = {
+      doc_file_extension = ".txt", -- Documentation file extension (can allow a better search in buffers list with telescope)
+      view_type = "vsplit", -- Options : "current", "split", "vsplit", "tab", "floating"
+      split_side = false, -- (For split and vsplit only) Open on the right or top on false and on the left or bottom on true
+      keymaps = {
+        declaration = "gd", -- Keymap to go to definition
+        close = { "q", "<Esc>" }, -- Keymap for closing the documentation
+      },
+      floating_win_size = 0.8, -- Floating window size
+      picker = "telescope" -- Options : "telescope", "snacks"
+    }
+  }
 }, {})
+
+require('telescope').load_extension('gdscript-extended-lsp')
+
+require('neoscroll').setup({
+  duration_multiplier = .01,
+})
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
@@ -550,7 +566,7 @@ require('telescope').setup {
       path_display = filenameFirst,
       no_ignore = true,
       -- no_ignore_parent = true,
-      file_ignore_patterns = { 'node_modules', '.git', '.venv', 'dist/css', 'dist/js' },
+      file_ignore_patterns = { 'node_modules', '.git', '.venv', 'dist/css', 'dist/js', '%.tscn', '%.godot', '%.png'},
       additional_args = function(_)
         return { "--hidden" }
       end
@@ -559,7 +575,7 @@ require('telescope').setup {
       path_display = filenameFirst,
       -- no_ignore = true,
       -- no_ignore_parent = true,
-      file_ignore_patterns = { 'node_modules', '.git', '.venv', 'dist/css', 'dist/js' },
+      file_ignore_patterns = { 'node_modules', '.git', '.venv', 'dist/css', 'dist/js', '%.tscn', '%.godot', '%.png' },
       hidden = true
     },
     git_status = { path_display = filenameFirst },
@@ -633,6 +649,9 @@ vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc
 vim.keymap.set('n', '<leader>sG', ':LiveGrepGitRoot<cr>', { desc = '[S]earch by [G]rep on Git Root' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = '[S]earch [R]esume' })
+
+-- vim.keymap.set('n', '<leader>gd', require('gdscript-extended-lsp').picker, { desc = '[G]odot [D]ocs' })
+
 
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
@@ -724,7 +743,6 @@ local on_attach = function(client, bufnr)
     -- local goto_omni = function()
     --     require('omnisharp_extended').telescope_lsp_definitions({jump_type = "vsplit"})
     -- end
-
     if client.name == "omnisharp" then
         nmap('gd', require('omnisharp_extended').telescope_lsp_definition, "[G]oto [D]efinition")
         nmap('gr', require('omnisharp_extended').telescope_lsp_references, '[G]oto [R]eferences')
@@ -743,8 +761,12 @@ local on_attach = function(client, bufnr)
     nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
     -- nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
 
-    -- Lesser used LSP functionality
-    nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+    if client.name == "gdscript" then
+        nmap('gd', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+    else
+        -- Lesser used LSP functionality
+        nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+    end
     nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
     nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
     nmap('<leader>wl', function()
