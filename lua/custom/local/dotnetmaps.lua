@@ -12,6 +12,10 @@ local function dir_lookup(directory)
   local runString = 'dir "'..directory..'" /b'
   local items = {}
 
+  if package.config:sub(1,1) ~= "\\" then -- windows
+    runString = 'ls -p "' .. directory .. '" | grep -v /'
+  end
+
   for file in io.popen(runString):lines() do
     table.insert(items, file)
   end

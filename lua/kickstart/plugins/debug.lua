@@ -22,7 +22,7 @@ return {
     -- Add your own debuggers here
     'leoluz/nvim-dap-go',
   },
-  config = function()
+    config = function()
     local dap = require 'dap'
     local dapui = require 'dapui'
 
@@ -40,14 +40,15 @@ return {
       ensure_installed = {
         -- Update this to ensure that you have the debuggers for the langs you want
         'delve',
+        "netcoredbg",
       },
     }
 
     -- Basic debugging keymaps, feel free to change to your liking!
     vim.keymap.set('n', '<F5>', dap.continue, { desc = 'Debug: Start/Continue' })
-    vim.keymap.set('n', '<F1>', dap.step_into, { desc = 'Debug: Step Into' })
-    vim.keymap.set('n', '<F2>', dap.step_over, { desc = 'Debug: Step Over' })
-    vim.keymap.set('n', '<F3>', dap.step_out, { desc = 'Debug: Step Out' })
+    vim.keymap.set('n', '<F11>', dap.step_into, { desc = 'Debug: Step Into' })
+    vim.keymap.set('n', '<F10>', dap.step_over, { desc = 'Debug: Step Over' })
+    vim.keymap.set('n', '<F12>', dap.step_out, { desc = 'Debug: Step Out' })
     vim.keymap.set('n', '<leader>b', dap.toggle_breakpoint, { desc = 'Debug: Toggle Breakpoint' })
     vim.keymap.set('n', '<leader>B', function()
       dap.set_breakpoint(vim.fn.input 'Breakpoint condition: ')
@@ -84,5 +85,17 @@ return {
 
     -- Install golang specific config
     require('dap-go').setup()
+
+    local netcore_mason_path = vim.fn.stdpath("data") .. "/mason/packages/netcoredbg/netcoredbg"
+    local netcore_adapter = {
+        type = "executable",
+        command = netcore_mason_path,
+        args = { "--interpreter=vscode" },
+    }
+
+    dap.adapters.netcoredbg = netcore_adapter
+    dap.adapters.coreclr = netcore_adapter -- for unit test debugging
+
+
   end,
 }
