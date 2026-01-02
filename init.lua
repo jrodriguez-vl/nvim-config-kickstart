@@ -56,7 +56,7 @@ require('lazy').setup({
   'tpope/vim-rhubarb',
 
   -- Detect tabstop and shiftwidth automatically
-  'tpope/vim-sleuth',
+  -- 'tpope/vim-sleuth',
 
   -- NOTE: This is where your plugins related to LSP can be installed.
   --  The configuration is done below. Search for lspconfig to find it below.
@@ -328,9 +328,9 @@ require('lazy').setup({
       'kevinhwang91/promise-async'
     }
   },
-  {
-    "karb94/neoscroll.nvim",
-  },
+  -- {
+  --   "karb94/neoscroll.nvim",
+  -- },
   {
     "teatek/gdscript-extended-lsp.nvim", opts = {
       doc_file_extension = ".txt", -- Documentation file extension (can allow a better search in buffers list with telescope)
@@ -348,9 +348,9 @@ require('lazy').setup({
 
 require('telescope').load_extension('gdscript-extended-lsp')
 
-require('neoscroll').setup({
-  duration_multiplier = .01,
-})
+-- require('neoscroll').setup({
+--   duration_multiplier = .01,
+-- })
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
@@ -566,7 +566,7 @@ require('telescope').setup {
       path_display = filenameFirst,
       no_ignore = true,
       -- no_ignore_parent = true,
-      file_ignore_patterns = { 'node_modules', '.git', '.venv', 'dist/css', 'dist/js', '%.tscn', '%.godot', '%.png'},
+      file_ignore_patterns = { 'node_modules', '.git', '.venv', 'dist/css', 'dist/js', '%.tscn', '%.godot', '%.png', '%.gd.uid', '%.import', '%.svg', '%.tres', '%.webp' },
       additional_args = function(_)
         return { "--hidden" }
       end
@@ -575,7 +575,7 @@ require('telescope').setup {
       path_display = filenameFirst,
       -- no_ignore = true,
       -- no_ignore_parent = true,
-      file_ignore_patterns = { 'node_modules', '.git', '.venv', 'dist/css', 'dist/js', '%.tscn', '%.godot', '%.png' },
+      file_ignore_patterns = { 'node_modules', '.git', '.venv', 'dist/css', 'dist/js', '%.tscn', '%.godot', '%.png', '%.gd.uid', '%.import', '%.svg', '%.tres', '%.webp' },
       hidden = true
     },
     git_status = { path_display = filenameFirst },
@@ -659,7 +659,7 @@ vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = 
 vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { 'c', 'cpp', 'c_sharp', 'gdscript','go', 'lua', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'vue', 'php', 'bash', 'xml', 'kotlin' , 'xml' },
+    ensure_installed = { 'c', 'cpp', 'c_sharp', 'gdscript','go', 'lua', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'vue', 'php', 'python','bash', 'xml', 'kotlin' , 'xml' },
 
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
     auto_install = false,
@@ -763,6 +763,7 @@ local on_attach = function(client, bufnr)
 
     if client.name == "gdscript" then
         nmap('gd', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+        vim.o.expandtab = false;
     else
         -- Lesser used LSP functionality
         nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
