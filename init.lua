@@ -343,7 +343,15 @@ require('lazy').setup({
       floating_win_size = 0.8, -- Floating window size
       picker = "telescope" -- Options : "telescope", "snacks"
     }
-  }
+  },
+  {
+    "lervag/vimtex",
+    lazy = false,     -- we don't want to lazy load VimTeX
+    init = function()
+      vim.g.vimtex_view_general_viewer = "okular"
+      vim.g.vimtex_view_general_options = "--unique file:@pdf#src:@line@tex"
+    end
+  },
 }, {})
 
 require('telescope').load_extension('gdscript-extended-lsp')
