@@ -577,7 +577,7 @@ require('telescope').setup {
       path_display = filenameFirst,
       no_ignore = true,
       -- no_ignore_parent = true,
-      file_ignore_patterns = { 'node_modules', '.git', '.venv', 'dist/css', 'dist/js', '%.tscn', '%.godot', '%.png', '%.gd.uid', '%.import', '%.svg', '%.tres', '%.webp' },
+      file_ignore_patterns = { 'node_modules', '.git', '.venv', 'dist/css', 'dist/js', '%.tscn', '%.godot', '%.png', '%.gd.uid', '%.import', '%.svg', '%.tres', '%.webp', '%.ogg' },
       additional_args = function(_)
         return { "--hidden" }
       end
@@ -586,7 +586,8 @@ require('telescope').setup {
       path_display = filenameFirst,
       -- no_ignore = true,
       -- no_ignore_parent = true,
-      file_ignore_patterns = { 'node_modules', '.git', '.venv', 'dist/css', 'dist/js', '%.tscn', '%.godot', '%.png', '%.gd.uid', '%.import', '%.svg', '%.tres', '%.webp' },
+      file_ignore_patterns = { 'node_modules', '.git', '.venv', 'dist/css', 'dist/js', '%.tscn', '%.godot', '%.png', '%.gd.uid', '%.import', '%.svg', '%.tres', '%.webp', '%.ogg' },
+      sorter= require("telescope.sorters").get_fuzzy_file(),
       hidden = true
     },
     git_status = { path_display = filenameFirst },
