@@ -259,11 +259,9 @@ require('lazy').setup({
       -- requirements installed.
       {
         'nvim-telescope/telescope-fzf-native.nvim',
-        -- NOTE: If you are having trouble with this installation,
-        --       refer to the README for telescope-fzf-native for more instructions.
-        build = 'make',
+        build = vim.fn.has('win32') == 1 and 'mingw32-make' or 'make',
         cond = function()
-          return vim.fn.executable 'make' == 1
+          return vim.fn.executable(vim.fn.has('win32') == 1 and 'mingw32-make' or 'make') == 1
         end,
       },
     },
@@ -577,18 +575,22 @@ require('telescope').setup {
       path_display = filenameFirst,
       no_ignore = true,
       -- no_ignore_parent = true,
-      file_ignore_patterns = { 'node_modules', '.git', '.venv', 'dist/css', 'dist/js', '%.tscn', '%.godot', '%.png', '%.gd.uid', '%.import', '%.svg', '%.tres', '%.webp', '%.ogg' },
+      file_ignore_patterns = { 'node_modules', '.git', '.venv', 'dist/css', 'dist/js', '%.tscn', '%.godot', '%.png', '%.gd.uid', '%.import', '%.svg', '%.tres', '%.webp', '%.ogg', '%.jpg', '%.jpeg' },
       additional_args = function(_)
         return { "--hidden" }
       end
     },
     find_files = {
       path_display = filenameFirst,
-      -- no_ignore = true,
-      -- no_ignore_parent = true,
-      file_ignore_patterns = { 'node_modules', '.git', '.venv', 'dist/css', 'dist/js', '%.tscn', '%.godot', '%.png', '%.gd.uid', '%.import', '%.svg', '%.tres', '%.webp', '%.ogg' },
-      sorter= require("telescope.sorters").get_fuzzy_file(),
-      hidden = true
+      file_ignore_patterns = { 'node_modules', '.git', '.venv', 'dist/css', 'dist/js', '%.tscn', '%.godot', '%.png', '%.gd.uid', '%.import', '%.svg', '%.tres', '%.webp', '%.ogg', '%.jpg', '%.jpeg' },
+      hidden = true,
+      entry_maker = function(entry)
+        return {
+          value = entry,
+          ordinal = vim.fn.fnamemodify(entry, ":t"),
+          display = function(e) return filenameFirst(nil, e.value) end,
+        }
+      end,
     },
     git_status = { path_display = filenameFirst },
 
@@ -904,18 +906,21 @@ mason_lspconfig.setup_handlers {
 }
 
 -- Can't add 'gdscript' to servers because it is not listed in Mason. So :MasonInstall gdscript won't work
+local gdscript_capabilities = vim.tbl_deep_extend("force", capabilities, {
+	textDocument = {
+		semanticTokens = {
+			dynamicRegistration = false,
+			requests = { full = vim.lsp.protocol.TextDocumentSyncKind.None, range = vim.lsp.protocol.TextDocumentSyncKind.None },
+		},
+	},
+})
 local gdscript_config = {
-	capabilities = capabilities,
+	capabilities = gdscript_capabilities,
 	on_attach = on_attach,
 	settings = {},
-  filetypes = { "gd", "gdscript" },
+	filetypes = { "gd", "gdscript" },
 }
-if vim.fn.has("win32") == 1 then
-	-- Windows specific. Requires nmap installed (`winget install nmap`)
-	gdscript_config["cmd"] = { "ncat", "127.0.0.1", os.getenv("GDScript_Port") or "6005" }
-else
-  gdscript_config["cmd"] = vim.lsp.rpc.connect("172.29.176.1", "6005")
-end
+gdscript_config["cmd"] = vim.lsp.rpc.connect("127.0.0.1", os.getenv("GDScript_Port") or "6005")
 require("lspconfig").gdscript.setup(gdscript_config)
 
 -- [[ Configure nvim-cmp ]]
