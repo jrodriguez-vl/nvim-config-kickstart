@@ -671,7 +671,7 @@ vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = 
 vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { 'c', 'cpp', 'c_sharp', 'gdscript','go', 'lua', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'vue', 'php', 'python','bash', 'xml', 'kotlin' , 'xml' },
+    ensure_installed = { 'c', 'cpp', 'c_sharp', 'gdscript', 'godot_resource', 'hlsl', 'go', 'lua', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'vue', 'php', 'python','bash', 'xml', 'kotlin' , 'xml' },
 
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
     auto_install = false,
@@ -908,10 +908,11 @@ local gdscript_config = {
 	capabilities = capabilities,
 	on_attach = on_attach,
 	settings = {},
+  filetypes = { "gd", "gdscript" },
 }
 if vim.fn.has("win32") == 1 then
 	-- Windows specific. Requires nmap installed (`winget install nmap`)
-	gdscript_config["cmd"] = { "ncat", "localhost", os.getenv("GDScript_Port") or "6005" }
+	gdscript_config["cmd"] = { "ncat", "127.0.0.1", os.getenv("GDScript_Port") or "6005" }
 else
   gdscript_config["cmd"] = vim.lsp.rpc.connect("172.29.176.1", "6005")
 end
@@ -933,9 +934,7 @@ cmp.setup {
   -- completion = {
   --   completeopt = 'menu,menuone,noinsert',
   -- },
-  g = {
-    completeopt = 'menu,menuone,noinsert',
-  },
+  completion = { completeopt = 'menu,menuone,noinsert' },
   mapping = cmp.mapping.preset.insert {
     ['<C-n>'] = cmp.mapping.select_next_item(),
     ['<C-p>'] = cmp.mapping.select_prev_item(),
